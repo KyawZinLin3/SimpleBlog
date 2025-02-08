@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frontend", "frontend", "{9890D8F6-9155-415C-B842-ACFFEE7FF727}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{74D301EB-24E1-496F-8217-E9CDBCB9BE40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBlog.UI", "SimpleBlog.UI\SimpleBlog.UI.csproj", "{D87D8BA1-EB0F-4D21-899D-5ADEB94034DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBlog.WebAPI", "SimpleBlog.WebAPI\SimpleBlog.WebAPI.csproj", "{957089EA-2FDC-4929-B37A-0B785B730499}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{321148DD-300F-4737-84EF-8B4CFBE04243}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D87D8BA1-EB0F-4D21-899D-5ADEB94034DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D87D8BA1-EB0F-4D21-899D-5ADEB94034DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D87D8BA1-EB0F-4D21-899D-5ADEB94034DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D87D8BA1-EB0F-4D21-899D-5ADEB94034DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{957089EA-2FDC-4929-B37A-0B785B730499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{957089EA-2FDC-4929-B37A-0B785B730499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{957089EA-2FDC-4929-B37A-0B785B730499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{957089EA-2FDC-4929-B37A-0B785B730499}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D87D8BA1-EB0F-4D21-899D-5ADEB94034DB} = {9890D8F6-9155-415C-B842-ACFFEE7FF727}
+		{957089EA-2FDC-4929-B37A-0B785B730499} = {74D301EB-24E1-496F-8217-E9CDBCB9BE40}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D8C59CF-386C-46F0-99E2-D8DF58EEA467}
+	EndGlobalSection
+EndGlobal
