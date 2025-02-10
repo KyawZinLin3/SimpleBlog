@@ -6,6 +6,9 @@ namespace SimpleBlog.WebAPI.Repositories.PostRepo
 {
     public interface IPostRepository : IRepository<Post>
     {
+        Task<GetPostDetail> GetPostById(int postId);
+        Task<Post> GetPostByIdAsync(int postId);
         Task<List<GetPost>> GetPosts();
+        Task<List<GetPost>> GetPostsByUserId(string userId);
     }
 }

@@ -28,7 +28,7 @@
 
         /* Edit Icon Styling */
         .edit-icon {
-            font-size: 1.3rem;
+            font-size: 2rem;
             cursor: pointer;
             color: black;
         }
@@ -73,25 +73,7 @@
 </head>
 <body>
     <header>
-        @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SimpleBlog.UI</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav> *@
+        
         <div id="loadingScreen">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -101,55 +83,41 @@
             <div class="container d-flex align-items-center justify-content-between">
 
                 <!-- Brand -->
-                <a class="navbar-brand fw-bold fs-4" asp-area="" asp-controller="Home" asp-action="Index">SimpleBlog</a>
+                <a class="navbar-brand fw-bold fs-4 navigation" asp-area="" asp-controller="Home" asp-action="Index">SimpleBlog</a>
 
                 <!-- Desktop Search Bar -->
-                <form class="d-flex ms-auto me-3 d-none d-lg-flex">
+                <form class="d-flex ms-auto me-3 d-none d-lg-flex " style="visibility:hidden">
                     <input class="form-control me-2" type="search" placeholder="Search Medium" aria-label="Search">
                     <button class="btn btn-outline-secondary" type="submit">Search</button>
                 </form>
 
                
 
-                <!-- Mobile Search Icon -->
-                <a class="nav-link me-3 d-lg-none" href="javascript:void(0);" onclick="toggleSearch()">
-                    <i class="bi bi-search fs-4"></i> <!-- Bootstrap Search Icon -->
-                </a>
-
-                <!-- Avatar (Dropdown on Click) -->
-               @*  <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown">
-                        <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Write a Story</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#">Sign Out</a></li>
-                    </ul>
-                </div> *@
+               
+               
+              
 
                 @if (User.Identity.IsAuthenticated)
                 {
                     <!-- Write a Story Icon -->
-                    <a class="nav-link me-3 d-none d-lg-inline" title="Write a Story" asp-area="" asp-controller="Content" asp-action="Create">
+                    <a class="nav-link me-3 d-none d-lg-inline navigation" title="Write a Story" asp-area="" asp-controller="Content" asp-action="Create">
                         <i class="bi bi-pencil-square edit-icon"></i> <!-- Bootstrap Edit Icon -->
                     </a>
                     <!-- User Dropdown (Only if logged in) -->
                     <div class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <img src="@(User.FindFirst("AvatarUrl")?.Value ?? "https://via.placeholder.com/40")"
-                                 alt="Avatar" class="rounded-circle" width="40" height="40">
+                            <i class="bi bi-person-circle avatar" style="font-size: 2rem;
+        cursor: pointer;
+        color: black;"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item d-lg-none" asp-controller="Content" asp-action="Create">Write a Story</a></li>
-                            <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a></li>
-                            <li><a class="dropdown-item" asp-controller="Account" asp-action="Settings">Settings</a></li>
+                            <li><a class="dropdown-item d-lg-none navigation" asp-controller="Content" asp-action="Create">Write a Story</a></li>
+                            <li><a class="dropdown-item navigation" asp-controller="Profile" asp-action="ProfileView">Profile</a></li>
+                            <li><a class="dropdown-item navigation" asp-controller="Account" asp-action="Settings">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
-                                    <button type="submit" class="dropdown-item text-danger">Sign Out</button>
+                                    <button type="submit" class="dropdown-item text-danger navigation">Sign Out</button>
                                 </form>
                             </li>
                         </ul>
@@ -159,26 +127,16 @@
                 {
                     <!-- Login & Register Buttons (Only if NOT logged in) -->
                     <div class="nav-item">
-                        <a class="btn btn-outline-primary me-2" asp-controller="Auth" asp-action="Login">Login</a>
+                        <a class="btn navigation btn-outline-primary me-2" asp-controller="Auth" asp-action="Login">Login</a>
                     </div>
                     <div class="nav-item">
-                        <a class="btn btn-primary" asp-controller="Auth" asp-action="Register">Create Account</a>
+                        <a class="btn btn-primary navigation" asp-controller="Auth" asp-action="Register">Create Account</a>
                     </div>
                 }
 
             </div>
         </nav>
-        <!-- Navbar End -->
-        <!-- Mobile Search Section (Hidden by Default) -->
-        <div id="searchSection">
-            <input type="text" class="form-control mb-2" placeholder="Search Medium...">
-            <h6>Recently Searched</h6>
-            <ul class="list-group">
-                <li class="list-group-item">Bootstrap 5 Navbar</li>
-                <li class="list-group-item">Medium Clone</li>
-                <li class="list-group-item">Responsive UI</li>
-            </ul>
-        </div>
+      
        
     </header>
    
@@ -188,11 +146,7 @@
         </main>
     </div>
 
-   @*  <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SimpleBlog.UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer> *@
+   
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -206,7 +160,8 @@
         // Show loader when navigating to another page
         document.addEventListener("click", function (e) {
             let target = e.target.closest("a");
-            if (target && target.href && !target.href.includes("#")) {
+            const isTargetNavigationLink = target.classList.contains("navigation");
+            if (target && isTargetNavigationLink && target.href && !target.href.includes("#")) {
                 document.getElementById("loadingScreen").classList.add("show");
             }
         });

@@ -1,8 +1,8 @@
-﻿using SimpleBlog.WebAPI.Models.Tag;
+﻿using SimpleBlog.UI.Models.Tag;
 
-namespace SimpleBlog.WebAPI.Models.Post
+namespace SimpleBlog.UI.Models.Content
 {
-    public class GetPostDetail
+    public class GetContentDetail
     {
         public int Id { get; set; }
         public string Title { get; set; }

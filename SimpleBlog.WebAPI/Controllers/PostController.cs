@@ -4,6 +4,8 @@ using SimpleBlog.WebAPI.Models.Tag;
 using SimpleBlog.WebAPI.Models;
 using SimpleBlog.WebAPI.Services;
 using SimpleBlog.WebAPI.Models.Post;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SimpleBlog.WebAPI.Controllers
 {
@@ -12,9 +14,11 @@ namespace SimpleBlog.WebAPI.Controllers
     public class PostController : Controller
     {
         private readonly PostService _postService;
-        public PostController(PostService postService)
+        private readonly ILogger<PostController> _logger;
+        public PostController(PostService postService, ILogger<PostController> logger)
         {
             _postService = postService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -30,7 +34,7 @@ namespace SimpleBlog.WebAPI.Controllers
         public async Task<IActionResult> GetPostById(int id)
         {
             var post = await _postService.GetPostById(id);
-            return Ok(ApiResponse<Post>.SuccessResponse(post));
+            return Ok(ApiResponse<GetPostDetail>.SuccessResponse(post));
         }
 
         [HttpPost]
@@ -56,17 +60,8 @@ namespace SimpleBlog.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdatePost([FromBody] UpdatePost updatePost)
         {
-            var post = new Post
-            {
-                Id = updatePost.Id,
-                Title = updatePost.Title,
-                Content = updatePost.Content,
-                Status = updatePost.Status,
-                AuthorId = updatePost.AuthorId,
-                UpdatedAt = DateTime.UtcNow,
-                PostTags = updatePost.PostTags.Count > 0 ? updatePost.PostTags.Select(x => new PostTag { TagId = x.TagId }).ToList() : null
-            };
-            var result = await _postService.UpdatePost(post);
+           
+            var result = await _postService.UpdatePost(updatePost);
             if (!result)
             {
                 return BadRequest(ApiResponse<string>.ErrorResponse("Post Update Fail"));
@@ -75,15 +70,32 @@ namespace SimpleBlog.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePost([FromQuery] int Id)
+        public async Task<IActionResult> DeletePost( int Id)
         {
-            var result = await _postService.DeletePost(Id);
-
-            if (!result)
+            var post = await _postService.GetNormalPostById(Id);
+            if (post.AuthorId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
-                return BadRequest(ApiResponse<string>.ErrorResponse("Post Delete Fail"));
+                var result = await _postService.DeletePost(Id);
+                if (!result)
+                {
+                    return BadRequest(ApiResponse<string>.ErrorResponse("Post Delete Fail"));
+                }
             }
+
             return Ok(ApiResponse<string>.SuccessResponse("Post deleted successfully"));
+        }
+
+        [HttpGet("GetByUserId")]
+        [Authorize]
+        public async Task<IActionResult> GetPostsByAuthorId()
+        {
+            foreach (var claim in User.Claims)
+            {
+                _logger.LogInformation($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var post = await _postService.GetAllPostsByUserId(userId);
+            return Ok(ApiResponse<IEnumerable<GetPost>>.SuccessResponse(post));
         }
     }
 }

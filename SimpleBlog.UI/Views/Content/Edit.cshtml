@@ -1,0 +1,79 @@
+﻿@model SimpleBlog.UI.Models.Content.EditContent
+
+@{
+    ViewData["Title"] = "Edit Content";
+}
+<style>
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 10px;
+        margin: 3px;
+        font-size: 14px;
+    }
+
+    .chip .close-btn {
+        margin-left: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="col-md-8 offset-md-2">
+        <h3 class="text-center">Edit Post</h3>
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Title -->
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input asp-for="Title" class="form-control" required>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <!-- Tags (Multi-Select Dropdown with Chips) -->
+            <div class="mb-3">
+                <label class="form-label">Tags</label>
+                <select id="multiSelect" class="form-select" name="TagId" multiple="multiple">
+                    @foreach (var tag in Model.AvailableTags)
+                    {
+                        <option value="@tag.Id" selected="@(Model.TagId != null && Model.TagId.Contains(tag.Id))">@tag.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="TagId" class="text-danger"></span>
+            </div>
+
+            <!-- Content -->
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea asp-for="Content" class="form-control" id="editor" required></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/plnvwnmihvy6g30r5uf6uuyfc1j0f75vepsp660evfh82263/tinymce/6/tinymce.min.js"></script>
+
+<script>
+    // Initialize TinyMCE
+    tinymce.init({
+        selector: '#editor',
+        height: 300,
+        plugins: 'lists link image preview wordcount',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image'
+    });
+
+
+
+</script>

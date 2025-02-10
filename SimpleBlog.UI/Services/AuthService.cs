@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using SimpleBlog.UI.Models;
+using SimpleBlog.UI.Models.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Json;
@@ -21,6 +22,32 @@ namespace SimpleBlog.UI.Services
             _logger = logger;
         }
 
+        public async Task<bool> RegisterAsync(User user)
+        {
+            try
+            {
+                var requestPayload = new
+                {
+                    FullName = user.FullName,   
+                    Email = user.Email,
+                    Password = user.Password,
+
+                };
+
+                var client = _httpClientFactory.CreateClient("ApiClient");
+                var response = await client.PostAsJsonAsync("auth/register", requestPayload);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("User register error", ex);
+            }
+        }
         public async Task<bool> LoginAsync(string username, string password)
         {
             try
@@ -54,15 +81,18 @@ namespace SimpleBlog.UI.Services
                     _logger.LogWarning("Token is null or empty.");
                     return false;
                 }
-                
+
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(token);
-                var userId =jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userNameFromJwt = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var Email = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, userId),
-                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Name, userNameFromJwt),
+                    new Claim(ClaimTypes.Email, Email),
                     new Claim("AuthToken", token)
                 };
 
