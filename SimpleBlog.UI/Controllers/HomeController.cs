@@ -11,25 +11,24 @@ namespace SimpleBlog.UI.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ProductService _productService;
         private readonly AuthService _authService;
+        private readonly PostService _postService;
 
         public HomeController(ILogger<HomeController> logger,
                               ProductService productService,
-                              AuthService authService)
+                              AuthService authService,
+                              PostService postService)
         {
             _logger = logger;
             _productService = productService;
             _authService = authService;
+            _postService = postService;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
 
         public async Task<IActionResult> Index()
         {
-            var products = await _productService.GetProductsAsync();
-            return View(products);  
+            var contents = await _postService.GetPost();
+            return View(contents);  
         }
 
         public IActionResult Privacy()

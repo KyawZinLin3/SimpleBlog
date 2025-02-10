@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using SimpleBlog.WebAPI.Services;
 using SimpleBlog.WebAPI.Entites;
 using SimpleBlog.WebAPI.Repositories.Base;
+using SimpleBlog.WebAPI.Middlewares;
+using SimpleBlog.WebAPI.Repositories.PostRepo;
 
 namespace SimpleBlog.WebAPI
 {
@@ -28,9 +30,14 @@ namespace SimpleBlog.WebAPI
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IRepository<Tag>, Repository<Tag>>();
+            builder.Services.AddScoped<IRepository<Media>, Repository<Media>>();
+            builder.Services.AddScoped<IRepository<Post>, Repository<Post>>();
+            builder.Services.AddScoped<IPostRepository,PostRepository>();
 
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<TagService>();
+            builder.Services.AddScoped<MediaService>();
+            builder.Services.AddScoped<PostService>();
 
          
 
@@ -64,6 +71,7 @@ namespace SimpleBlog.WebAPI
                             });
             builder.Services.AddAuthorization();
 
+
             var SimpleBlogMVCOrigins = "_SimpleBlogMVCOrigins";
 
             builder.Services.AddCors(options =>
@@ -78,6 +86,8 @@ namespace SimpleBlog.WebAPI
             });
 
             var app = builder.Build();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

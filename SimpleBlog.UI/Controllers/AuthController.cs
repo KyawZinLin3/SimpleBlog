@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SimpleBlog.UI.Models.Auth;
 using SimpleBlog.UI.Services;
 
 namespace SimpleBlog.UI.Controllers
@@ -13,15 +14,40 @@ namespace SimpleBlog.UI.Controllers
         }
 
         [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(User userModel)
+        {
+            if (ModelState.IsValid)
+            {
+                ViewBag.Message = "Registration Successful!";
+                return RedirectToAction("Success");
+            }
+            return View();
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Success()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(Login loginModel)
         {
-            var success = await _authService.LoginAsync(username, password);
+
+            var success = await _authService.LoginAsync(loginModel.Email, loginModel.Password);
             if (success)
             {
                 return RedirectToAction("Index", "Home");

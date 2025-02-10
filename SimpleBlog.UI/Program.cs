@@ -41,6 +41,8 @@ namespace SimpleBlog.UI
             //builder.Services.AddHttpClient<ProductService>();
             builder.Services.AddScoped<ProductService>();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<TagService>();
+            builder.Services.AddScoped<PostService>();
 
             var app = builder.Build();
 
@@ -51,6 +53,27 @@ namespace SimpleBlog.UI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+
+                if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+                {
+                    context.Request.Path = "/Home/Error";
+                    await next();
+                }
+                else if(context.Response.StatusCode == 403)
+                {
+                    context.Request.Path = "/Account/AccessDenied";
+                    await next();
+                }
+                else if(context.Response.StatusCode == 401)
+                {
+                    context.Request.Path = "/Auth/Login";
+                    await next();
+                }
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

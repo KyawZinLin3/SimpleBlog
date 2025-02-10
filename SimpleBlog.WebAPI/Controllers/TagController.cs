@@ -17,12 +17,28 @@ namespace SimpleBlog.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTags ()
+        public async Task<IActionResult> GetTags()
         {
-             var tags = await _tagService.GetAllTags();
-            if(tags == null)
+            var tags = await _tagService.GetAllTags();
+            if (tags == null)
                 return NotFound(ApiResponse<string>.ErrorResponse("No tags found"));
-            return Ok(ApiResponse<IEnumerable<Tag>>.SuccessResponse(tags));
+
+            var getTags = tags.Select(
+                tag => new GetTag
+                {
+                    Id = tag.Id,
+                    Name = tag.Name,
+                    CreatedAt = tag.CreatedAt
+                }
+            ).ToList();
+            return Ok(ApiResponse<List<GetTag>>.SuccessResponse(getTags));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTagById(int id)
+        {
+            var tag = await _tagService.GetTagById(id);
+            return Ok(ApiResponse<Tag>.SuccessResponse(tag));
         }
 
         [HttpPost]
@@ -39,6 +55,34 @@ namespace SimpleBlog.WebAPI.Controllers
                 return BadRequest(ApiResponse<string>.ErrorResponse("Tag Create Fail"));
             }
             return Ok(ApiResponse<string>.SuccessResponse("Tag created successfully"));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTag([FromBody] UpdateTag updateTag)
+        {
+            var tag = new Tag
+            {
+                Id = updateTag.Id,
+                Name = updateTag.Name,
+            };
+            var result = await _tagService.UpdateTag(tag);
+            if (!result)
+            {
+                return BadRequest(ApiResponse<string>.ErrorResponse("Tag Update Fail"));
+            }
+            return Ok(ApiResponse<string>.SuccessResponse("Tag updated successfully"));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTag([FromQuery] int Id)
+        {
+            var result = await _tagService.DeleteTag(Id);
+
+            if (!result)
+            {
+                return BadRequest(ApiResponse<string>.ErrorResponse("Tag Delete Fail"));
+            }
+            return Ok(ApiResponse<string>.SuccessResponse("Tag deleted successfully"));
         }
     }
 }

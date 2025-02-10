@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using SimpleBlog.UI.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -53,9 +54,14 @@ namespace SimpleBlog.UI.Services
                     _logger.LogWarning("Token is null or empty.");
                     return false;
                 }
+                
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                var userId =jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
                 var claims = new List<Claim>
                 {
+                    new Claim(ClaimTypes.NameIdentifier, userId),
                     new Claim(ClaimTypes.Name, username),
                     new Claim("AuthToken", token)
                 };
@@ -87,6 +93,11 @@ namespace SimpleBlog.UI.Services
         public string GetToken()
         {
             return _httpContextAccessor.HttpContext.User.FindFirst("AuthToken")?.Value;
+        }
+
+        public string GetUserId()
+        {
+            return _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }
 
