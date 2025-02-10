@@ -43,14 +43,11 @@ namespace SimpleBlog.WebAPI.Controllers
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] AuthResponse model)
         {
-            //var user = await _userManager.FindByEmailAsync(model.Token);
-            //if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime < DateTime.UtcNow)
-            //    return Unauthorized();
+          
 
             if (string.IsNullOrEmpty(model.RefreshToken))
                 return BadRequest("Refresh token is required.");
 
-            // Find user by refresh token
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == model.RefreshToken);
             if (user == null)
                 return Unauthorized("Invalid refresh token.");
@@ -58,11 +55,11 @@ namespace SimpleBlog.WebAPI.Controllers
             if (user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                 return Unauthorized("Refresh token has expired.");
 
-            // Generate new tokens
+         
             var newAccessToken = _authService.GenerateJwtToken(user);
             var newRefreshToken = _authService.GenerateRefreshToken();
 
-            // Save the new refresh token and invalidate the old one
+           
             user.RefreshToken = newRefreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
