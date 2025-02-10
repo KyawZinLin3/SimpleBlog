@@ -28,22 +28,7 @@
 
         <h3 class="text-center">Create a New Post</h3>
 
-        <!-- Cover Image Upload -->
-        <div class="mb-3 text-center">
-            <label class="form-label">Cover Image</label>
-            <div id="coverImageContainer">
-                @if (ViewBag.CoverImagePath != null)
-                {
-                    <img src="@ViewBag.CoverImagePath" id="coverImagePreview" class="img-fluid mb-2">
-                    <button type="button" class="btn btn-danger" id="removeCover">Remove</button>
-                }
-                else
-                {
-                    <input type="file" id="coverImage" name="CoverImage" class="form-control" accept="image/*">
-                    <button type="button" class="btn btn-primary mt-2" id="uploadCover">Add a Cover Image</button>
-                }
-            </div>
-        </div>
+       
 
         <form asp-action="Create" method="post" enctype="multipart/form-data">
 
@@ -89,7 +74,7 @@
 
             <!-- Buttons -->
             <div class="d-flex justify-content-between">
-                <button type="submit" name="actionType" value="draft" class="btn btn-secondary">Save Draft</button>
+               @*  <button type="submit" name="actionType" value="draft" class="btn btn-secondary">Save Draft</button> *@
                 <button type="submit" name="actionType" value="publish" class="btn btn-success">Publish</button>
             </div>
 
@@ -119,68 +104,7 @@
             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image'
         });
 
-        // Initialize Select2 for Multi-Select Tags
-        // $(document).ready(function () {
-        //     $('#tagsSelect').select2({
-        //         placeholder: "Select Tags",
-        //         allowClear: true,
-        //         tags: true, // Allow custom tags
-        //         tokenSeparators: [','],
-        //         closeOnSelect: false // Keep the dropdown open after selecting
-        //     });
-        // });
-
-        // let selectedValues = new Set(); // To store selected items
-
-        // document.getElementById("multiSelect").addEventListener("change", function () {
-        //     let selectedOption = this.value;
-        //     let selectedText = this.options[this.selectedIndex].text;
-
-        //     if (!selectedValues.has(selectedOption)) {
-        //         selectedValues.add(selectedOption);
-        //         addChip(selectedOption, selectedText);
-        //     }
-
-        //     // Reset dropdown to placeholder
-        //     this.value = "";
-        // });
-
-        function addChip(value, text) {
-            let chipContainer = document.getElementById("selectedItems");
-
-            let chip = document.createElement("div");
-            chip.classList.add("chip");
-            chip.dataset.value = value;
-            chip.innerHTML = `${text} <span class="close-btn">&times;</span>`;
-
-            chip.querySelector(".close-btn").addEventListener("click", function () {
-                chip.remove();
-                selectedValues.delete(value);
-            });
-
-            chipContainer.appendChild(chip);
-        }
-
-        // Cover Image Upload Logic
-        $("#uploadCover").click(function () {
-            $("#coverImage").click();
-        });
-
-        $("#coverImage").change(function () {
-            let file = this.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#coverImageContainer").html('<img src="' + e.target.result + '" class="img-fluid mb-2">' +
-                        '<button type="button" class="btn btn-danger" id="removeCover">Remove</button>');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        $(document).on("click", "#removeCover", function () {
-            $("#coverImageContainer").html('<input type="file" id="coverImage" name="CoverImage" class="form-control">' +
-                '<button type="button" class="btn btn-primary mt-2" id="uploadCover">Add a Cover Image</button>');
-        });
+      
+       
     </script>
 }

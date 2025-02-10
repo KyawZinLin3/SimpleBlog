@@ -18,8 +18,8 @@ namespace SimpleBlog.UI
                 })
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/Auth/Login"; // Redirect if not authenticated
-                    options.AccessDeniedPath = "/Account/AccessDenied";
+                    options.LoginPath = "/Auth/Login"; 
+                    options.AccessDeniedPath = "/Auth/AccessDenied";
                 });
          
             // Add services to the container.
@@ -54,31 +54,61 @@ namespace SimpleBlog.UI
                 app.UseHsts();
             }
 
-            app.Use(async (context, next) =>
-            {
-                await next();
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Response.OnStarting(() =>
+            //    {
+            //        if (context.Response.StatusCode == 401)
+            //        {
+            //            context.Response.Redirect("/Auth/Login");
+            //        }
+            //        else if (context.Response.StatusCode == 403)
+            //        {
+            //            context.Response.Redirect("/Auth/AccessDenied");
+            //        }
+            //        else if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+            //        {
+            //            context.Response.Redirect("/Home/Error");
+            //        }
 
-                if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
-                {
-                    context.Request.Path = "/Home/Error";
-                    await next();
-                }
-                else if(context.Response.StatusCode == 403)
-                {
-                    context.Request.Path = "/Account/AccessDenied";
-                    await next();
-                }
-                else if(context.Response.StatusCode == 401)
-                {
-                    context.Request.Path = "/Auth/Login";
-                    await next();
-                }
-            });
+            //        return Task.CompletedTask;
+            //    });
+
+            //    await next(); 
+            //});
+
+          
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.Use(async (context, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    Console.WriteLine("Middleware caught unauthorized");
+                    context.Response.Redirect("/Auth/Login");
+                }
+                if (context.Response.StatusCode == 401)
+                {
+                    Console.WriteLine("Get Unauthorize let go");
+                    context.Response.Redirect("/Auth/Login");
+                }
+                else if (context.Response.StatusCode == 403)
+                {
+                    context.Response.Redirect("/Auth/AccessDenied");
+                }
+                else if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+                {
+                    context.Response.Redirect("/Home/Error");
+                }
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

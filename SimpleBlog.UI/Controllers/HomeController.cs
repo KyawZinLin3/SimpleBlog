@@ -45,7 +45,7 @@ namespace SimpleBlog.UI.Controllers
         [Authorize] 
         public async Task<IActionResult> SecureProducts()
         {
-            var token = _authService.GetToken(); // Retrieve token from cookie
+            var token = _authService.GetToken(); 
             var products = await _productService.GetSecureProductsAsync(token);
             return View(products);
         }

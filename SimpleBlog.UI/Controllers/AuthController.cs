@@ -24,6 +24,12 @@ namespace SimpleBlog.UI.Controllers
         {
             if (ModelState.IsValid)
             {
+                var success = await _authService.RegisterAsync(userModel);
+                if(!success)
+                {
+                    ViewBag.Error = "Registration failed.";
+                    return View();
+                }
                 ViewBag.Message = "Registration Successful!";
                 return RedirectToAction("Success");
             }
@@ -63,6 +69,7 @@ namespace SimpleBlog.UI.Controllers
             return RedirectToAction("Login");
         }
 
+       
 
     }
 }

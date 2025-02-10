@@ -358,6 +358,38 @@ namespace SimpleBlog.WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3575),
+                            Name = "C#"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3588),
+                            Name = "JavaScript"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3590),
+                            Name = "Python"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3592),
+                            Name = "Java"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3593),
+                            Name = "Asp.Net Core"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

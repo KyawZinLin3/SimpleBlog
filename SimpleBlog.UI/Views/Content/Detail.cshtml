@@ -1,1 +1,41 @@
-﻿
+﻿@model SimpleBlog.UI.Models.Content.GetContentDetail
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<style>
+    .bi-person-circle {
+        font-size: 4rem;
+        cursor: pointer;
+        color: black;
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Author Section -->
+    <div class="d-flex align-items-center">
+        <i class="bi bi-person-circle"></i>
+        <div style="margin-left:10px">
+            <h6 class="mb-0">@Model.Author</h6>  <!-- Author Name -->
+            <small class="text-muted">Published on @Model.CreatedAt.ToString("MMMM dd, yyyy")</small>  <!-- Created Date -->
+        </div>
+    </div>
+
+    <!-- Title -->
+    <h2 class="fw-bold mt-3">@Model.Title</h2>
+
+    <!-- Tags -->
+    <div class="mb-3">
+        @foreach (var tag in Model.Tags)
+
+        {
+            <span class="badge bg-secondary me-1">@tag.Name</span>
+        }
+    </div>
+
+    <!-- Content (Rendered from TinyMCE, stored as HTML) -->
+    <div class="content-body">
+        @Html.Raw(Model.Content) <!-- Safely renders HTML from TinyMCE -->
+    </div>
+</div>

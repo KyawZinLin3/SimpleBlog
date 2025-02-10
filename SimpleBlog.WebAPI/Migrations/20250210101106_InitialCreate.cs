@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SimpleBlog.WebAPI.Migrations
 {
     /// <inheritdoc />
@@ -268,6 +270,18 @@ namespace SimpleBlog.WebAPI.Migrations
                         principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Tags",
+                columns: new[] { "Id", "CreatedAt", "Name" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3575), "C#" },
+                    { 2, new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3588), "JavaScript" },
+                    { 3, new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3590), "Python" },
+                    { 4, new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3592), "Java" },
+                    { 5, new DateTime(2025, 2, 10, 16, 41, 6, 374, DateTimeKind.Local).AddTicks(3593), "Asp.Net Core" }
                 });
 
             migrationBuilder.CreateIndex(

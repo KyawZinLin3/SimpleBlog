@@ -42,10 +42,13 @@
 
     @foreach (var post in Model)
     {
+        <a href="@Url.Action("Detail","Content",new {id = post.Id})" class="text-decoration-none text-dark">
         <div class="blog-card d-flex">
             <!-- Avatar Section -->
             <div class="me-3">
-                @* <img src="@post.AvatarUrl" alt="Avatar" class="avatar"> *@
+                    <i class="bi bi-person-circle avatar" style="font-size: 1.5rem;
+        cursor: pointer;
+        color: black;"></i>
             </div>
 
             <!-- Blog Content -->
@@ -71,5 +74,6 @@
                 </div>
             </div>
         </div>
+        </a>
     }
 </div>

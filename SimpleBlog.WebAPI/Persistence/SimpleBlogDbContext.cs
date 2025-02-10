@@ -20,9 +20,9 @@ namespace SimpleBlog.WebAPI.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Additional customizations (if needed)
 
-            // --- Post Configuration ---
+
+
             builder.Entity<Post>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -31,9 +31,6 @@ namespace SimpleBlog.WebAPI.Persistence
                       .IsRequired()
                       .HasMaxLength(200);
 
-                //entity.Property(e => e.Slug)
-                //      .IsRequired()
-                //      .HasMaxLength(200);
 
                 entity.Property(e => e.Content)
                       .IsRequired();
@@ -47,7 +44,6 @@ namespace SimpleBlog.WebAPI.Persistence
                 entity.Property(e => e.UpdatedAt)
                       .IsRequired();
 
-                // Each Post has one Author (ApplicationUser)
                 entity.HasOne(e => e.Author)
                       .WithMany(u => u.Posts)
                       .HasForeignKey(e => e.AuthorId)
@@ -65,12 +61,18 @@ namespace SimpleBlog.WebAPI.Persistence
 
                 entity.Property(e => e.CreatedAt)
                       .IsRequired();
+
+                entity.HasData(
+                        new Tag { Id = 1, Name = "C#", CreatedAt = DateTime.Now },
+                        new Tag { Id = 2, Name = "JavaScript", CreatedAt = DateTime.Now },
+                        new Tag { Id = 3, Name = "Python", CreatedAt = DateTime.Now },
+                        new Tag { Id = 4, Name = "Java", CreatedAt = DateTime.Now },
+                         new Tag { Id = 5, Name = "Asp.Net Core", CreatedAt = DateTime.Now }
+                );
             });
 
-            // --- PostTag Configuration (Join Table) ---
             builder.Entity<PostTag>(entity =>
             {
-                // Composite primary key
                 entity.HasKey(pt => new { pt.PostId, pt.TagId });
 
                 entity.HasOne(pt => pt.Post)
@@ -84,7 +86,6 @@ namespace SimpleBlog.WebAPI.Persistence
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // --- Comment Configuration ---
             builder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -95,22 +96,20 @@ namespace SimpleBlog.WebAPI.Persistence
                 entity.Property(e => e.CreatedAt)
                       .IsRequired();
 
-                // Each Comment is linked to one Post
                 entity.HasOne(e => e.Post)
                       .WithMany(p => p.Comments)
                       .HasForeignKey(e => e.PostId)
                       .OnDelete(DeleteBehavior.Cascade);
 
 
-                // Each Comment is linked to one ApplicationUser.
-                // Cascade delete is disabled (Restrict) to avoid multiple cascade paths.
+
                 entity.HasOne(e => e.User)
                       .WithMany(u => u.Comments)
                       .HasForeignKey(e => e.UserId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // --- Media Configuration ---
+
             builder.Entity<Media>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -121,7 +120,7 @@ namespace SimpleBlog.WebAPI.Persistence
                 entity.Property(e => e.UploadedAt)
                       .IsRequired();
 
-                // Media may be optionally associated with a Post.
+
                 entity.HasOne(e => e.Post)
              .WithMany(p => p.MediaItems)
              .HasForeignKey(e => e.PostId)
@@ -129,4 +128,5 @@ namespace SimpleBlog.WebAPI.Persistence
             });
         }
     }
+
 }
