@@ -8,7 +8,7 @@ namespace SimpleBlog.UI.Models.Content
         public string Title { get; set; }
 
         //[Required(ErrorMessage = "At least one tag is required")]
-        public List<int> TagId { get; set; } = new List<int>();// Stored as a comma-separated string
+        public List<int> TagId { get; set; } = new List<int>();
 
         //[Required(ErrorMessage = "Content cannot be empty")]
         public string Content { get; set; }
