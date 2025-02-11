@@ -24,7 +24,6 @@ SimpleBlog is a web application for creating, editing, and managing blog posts. 
 - Entity Framework Core
 - Identity for user management
 - Bootstrap for responsive design
-- jQuery for client-side scripting
 - JSON Web Tokens (JWT) for authentication
 
 ## Setup
