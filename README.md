@@ -61,4 +61,6 @@ dotnet run
 3. Manage tags for your posts.
 4. View posts by other users.
 
+## Slide 
+https://docs.google.com/presentation/d/14QFEXOz_i9k-WNafscyikMFxvRf9pfCKes413kJpuxk/edit?usp=sharing
 
