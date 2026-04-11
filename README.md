@@ -62,5 +62,5 @@ dotnet run
 4. View posts by other users.
 
 ## Slide 
-https://docs.google.com/presentation/d/14QFEXOz_i9k-WNafscyikMFxvRf9pfCKes413kJpuxk/edit?usp=sharing
+<!-- https://docs.google.com/presentation/d/14QFEXOz_i9k-WNafscyikMFxvRf9pfCKes413kJpuxk/edit?usp=sharing -->
 
